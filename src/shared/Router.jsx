@@ -1,30 +1,35 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { UseSelector, useSelector } from 'react-redux';
+import Home from '../pages/Home';
+import SearchPage from '../pages/SearchPage';
+import TestPage from '../pages/TestPage';
+import LoginPage from '../pages/non-auth/LoginPage';
+import SignupPage from '..//pages/non-auth/SignupPage';
+import Detail from '../pages/auth/Detail';
+import { useState } from 'react';
 
 export default function RouterPage() {
-  return (
-    <Router>
-      <Routes>
-        {/* 로그인 여부 상관없는 라우터 */}
-        <Route>
-          <Route path="/" />
-          <Route path="/search" />
-          <Route path="/testPage" />
-        </Route>
+	const [isLogin, setIsLogin] = useState(false);
+	return (
+		<Router>
+			<Routes>
+				{isLogin ? (
+					<Route>
+						<Route path="/test" element={<TestPage />} />
+						<Route path="/detail/:id" element={<Detail />} />
+					</Route>
+				) : (
+					<Route>
+						<Route path="/" element={<Home />} />
+						<Route path="/login" element={<LoginPage />} />
+						<Route path="/login" element={<SignupPage />} />
+						<Route path="/search" element={<SearchPage />} />
+					</Route>
+				)}
 
-        {/* 로그인 상태가 반드시 아니어야 하는 라우터 */}
-        <Route>
-          <Route path="/login" />
-          <Route path="/signup" />
-        </Route>
-
-        {/* 로그인이 필요한 라우터 */}
-        <Route>
-          <Route path="/user/:userId" />
-        </Route>
-
-        {/* 404 Not Found */}
-        <Route />
-      </Routes>
-    </Router>
-  );
+				{/* 404 Not Found */}
+				<Route />
+			</Routes>
+		</Router>
+	);
 }
